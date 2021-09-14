@@ -1426,3 +1426,390 @@ lifestore_searches = [
     [1032, 95],
     [1033, 95]
 ]
+
+
+
+
+
+
+
+
+
+
+
+#--------------------------------INICIO DE CÓDIGO--------------------------------
+
+
+#  Variables - Perfiles y Contraseñas
+administradores = ["Administrador1", "Administrador2"]
+password_admin = ["jesus1", "admin2"]
+usuarios = ["user1", "user2"]
+password_user = ["user123", "user1234"]
+
+# Variables de Entrada que detienen o repiten while del Mensaje de Entrada
+entrada = True
+admins = False
+users = False
+
+#----------------------------Mensaje de Bienvenida-------------------------
+print("------------------------------------------------------------------")
+print("                    ¡Bienvenido a LifeStore!                      ")
+print("------------------------------------------------------------------")
+
+
+
+#--------------------------Identificación de Perfil------------------------- 
+
+while entrada:
+    usuario_entrada = input("Ingrese su perfil (usuario/administrador): ")
+    password_entrada =input("Ingree su contraseña: ")
+    print("------------------------------------------------------------------")
+    
+    if usuario_entrada in administradores:
+        if usuario_entrada == administradores[0] and password_entrada == password_admin[0]:
+            entrada = False
+            admins = True
+            print("               ¡Bienvenido Administrador Jesus!")
+        elif usuario_entrada == administradores[1] and password_entrada == password_admin[1]:
+            entrada = False
+            admins = True
+            print("               ¡Bienvenido Administrador 2!")
+        else:
+            print("Por favor intente de nuevo...")
+    elif usuario_entrada in usuarios:
+        if usuario_entrada == usuarios[0] and password_entrada == password_user[0]:
+            entrada = False
+            users = True
+            print("               ¡Bienvenido Usuario1!")
+        elif usuario_entrada == usuarios[1] and password_entrada == password_user[1]:
+            entrada = False
+            users = True
+            print("               ¡Bienvenido Usuario 2!")
+        else:
+            print("Por favor intente de nuevo...")
+    else:
+        print("Lo sentimos no se encontro registro...")
+        entrada = True
+
+
+#--------------------------------Lista de Opciones ---------------------------
+if admins == True:  
+    print("------------------------------------------------------------------")        
+    print("Las opciones disponibles son las siguientes: ")  
+    print("1 Lista de MAYORES Ventas.")
+    print("2 Lista de MAYORES Búsquedas.")
+    print("3 Lista con MENORES Ventas.")
+    print("4 Lista de MENORES Búsquedas.")
+    print("5 Lista de MEJORES Reseñas.")
+    print("6 Lisra de PEORES Reseñas.")
+    print("7 Ventas  MENSUALES.")
+    print("------------------------------------------------------------------") 
+elif users == True:
+    print("------------------------------------------------------------------")        
+    print("Las opciones disponibles son las siguientes: ")  
+    print("A Lista de Productos.")
+    print("B Lista de Productos MÁS VENDIDOS.")
+    print("C Lista con Productos MÁS BUSCADOS.")
+    print("------------------------------------------------------------------")
+
+
+#--------------------------Creción de Listas a Utilizar----------------------
+#--------------------------Entrada para escoger la opción----------------------
+
+select = input("Por favor selecciones una opción: ")
+print("------------------------------------------------------------------")
+
+
+if select == "1":
+    print("Seleccionaste:     Opción 1 Lista de MAYORES Ventas")
+    #Declaramos la variable que se encargara de ir contanto las iteraciones con la Base de Datos.
+    contador = 0 #En el último bucle for nos ayudara a detener la busqueda cuando se llegue al número indicado. 
+    ventas_totales = [] #Declaramos nuestras listas que en un primer momento se encontrran vacias.
+    ventas_ordenadas = [] #Con los bucles for, While y la función append se añadiran los prodctos.
+    #Con este primer bucle for interactuamos directamente con las listas que son de nuestro interés.
+    for producto in lifestore_products:
+        for venta in lifestore_sales:
+            if producto[0] == venta[1]: # Buscamos el indice del ID del Producto, el cual debe ser el mismo en ambas listas. 
+                contador +=1
+            formato = [producto[0], contador, producto[1]] #Buscmos indices especificos de las listas que se incluiran al formato
+            ventas_totales.append(formato) #Se añaden a la Lista de Ventas Totales
+            contador = 0
+    while ventas_totales:
+        maximo = ventas_totales[0][1] #Con esta variable indicamos el indice que deseamos de ventas totales.
+        lista_actual = ventas_totales[0]
+        for grupo in ventas_totales: #Buscamos dentro de ventas totales.
+            if grupo[1]>maximo: #Y obtendremos los que cumplan solo esta condición. 
+                maximo = grupo[1] #Declaramos el indice que deseamos de la interación en ventas totales. 
+                lista_actual = grupo
+        ventas_ordenadas.append(lista_actual) #Agregamos los valores obtenidos a la lista de Ventas Ordenadas.
+        ventas_totales.remove(lista_actual) #Si alguna de esta
+    for i in range(0,15): #Obtendremos solo los primeros 15 productos
+        contador +=1 #Nuestro contador va ir sumando con cada producto que se añade
+        print(contador, "Ventas: ", ventas_ordenadas[i][1]) #Le damos formato a los valores que vamos a querer visualizar
+        print("Número ", contador, "Producto: ", ventas_ordenadas[i][2])
+        print("------------------------------------------------------------------")
+        
+
+elif select == "2":
+    print("Seleccionaste:     Opción 2 Lista de MAYORES Búsquedas.")
+    contador = 0 # Variable que nos va servir para contar el número de iteraciones.
+    busquedas_totales = [] #Declaramos las Listas vacias
+    busquedas_ordenadas = []
+
+    for producto in lifestore_products:
+        for buscar in lifestore_searches:
+            if producto[0] == buscar[1]: #Busqueda del ID de los productos dentro de las listas de Busquedas y Productos de LifeStore.
+                contador += 1
+        formato_busquedas = [producto[0], contador, producto[1]] #Formato de las busquedas de acuerdo al ID del Producto.
+        busquedas_totales.append(formato_busquedas)
+        contador = 0
+        
+    while busquedas_totales:
+        maximo = busquedas_totales[0][1]
+        lista1 = busquedas_totales[0]
+        for grupo in busquedas_totales:
+            if grupo[1] > maximo:
+                maximo = grupo[1]
+                lista1 = grupo
+        busquedas_ordenadas.append(lista1)
+        busquedas_totales.remove(lista1)
+        
+    for i in range (0,20):
+        contador += 1
+        print(contador, ".-", "Busquedas: ", busquedas_ordenadas[i][1]) #Agregamos formato a los valores que se van a devlver. 
+        print("Nombre del Producto: ", busquedas_ordenadas[i][2])
+        print("------------------------------------------------------------------")
+                
+elif select == "3":
+    print("Seleccionaste:     Opción 3 Lista con MENORES Ventas.")
+    contador = 0
+    ventas_totales = []
+    ventas_ordenadas =[]
+    
+    for producto in lifestore_products:
+        for venta in lifestore_sales:
+            if producto[0]== venta[1]:
+                contador+=1
+        formato =[producto[0], contador,producto[1]]
+        ventas_totales.append(formato)
+        contador=0
+
+    while  ventas_totales:
+        minimo = ventas_totales[0][1]
+        lista_actual = ventas_totales[0]
+        for grupo in ventas_totales:  
+            if grupo[1]<minimo:
+                minimo=grupo[1]
+                lista_actual=grupo
+        ventas_ordenadas.append(lista_actual)
+        ventas_totales.remove(lista_actual)
+    for i in range(0,15):  
+        contador += 1
+        print(contador, "Ventas: ", ventas_ordenadas[i][1])
+        print(contador, " Nombre: ", ventas_ordenadas[i][2])  
+        print("------------------------------------------------------------------")
+
+elif select == "4":
+        print("Seleccionaste:     Opción 4 Lista de MENORES Búsquedas")
+        agregar = 1
+        contador = 0
+        busquedas_totales = []
+        busquedas_ordenadas = []
+        
+        for producto in lifestore_products:
+          for buscar in lifestore_searches:
+            if producto[0] == buscar[1]:
+              contador += 1
+          formato = [producto[0], contador,producto[1]]
+          busquedas_totales.append(formato)
+          contador = 0
+        
+        while busquedas_totales:
+          minimos = busquedas_totales[0][1]
+          lista_actual1 = busquedas_totales[0]
+          for grupo in busquedas_totales:
+            if grupo[1] < minimos:
+              minimos = grupo[1]
+              lista_actual1 = grupo
+          busquedas_ordenadas.append(lista_actual1)
+          busquedas_totales.remove(lista_actual1)
+
+        for i in range(0,20):
+          contador += 1
+          print(contador,": ","Busquedas: ", busquedas_ordenadas[i][1])
+          print("Producto: ", busquedas_ordenadas[i][2])
+          print("------------------------------------------------------------------")
+
+elif select == "5":
+    print("Seleccionaste:     Opción 5 Lista de MEJORES Reseñas.")
+    agregar = 1
+    contador = 0
+    suma = 0
+    mejores_resenas = []
+    resenas_ordenadas = []
+
+    for producto in lifestore_products: 
+      for mejores in lifestore_sales:
+        if producto[0] == mejores[1]:
+          contador += 1
+          suma += mejores[2]
+      media = suma /contador
+      formato = [media,producto[1],producto[0],]
+      mejores_resenas.append(formato)
+
+    while mejores_resenas:
+      mejor = mejores_resenas[0][2]
+      lista = mejores_resenas[0]
+      for grupo in mejores_resenas:
+        if grupo[0] < mejor:
+            mejor += grupo[2]
+            lista = grupo     
+      resenas_ordenadas.append(lista)
+      mejores_resenas.remove(lista)
+
+    for i in range (0,10):
+      print("Producto: ",resenas_ordenadas[i][1])
+      print("Calificación en Reseña: ",resenas_ordenadas[i][0])
+      print("------------------------------------------------------------------")
+
+elif select == "6":
+    print("Seleccionaste:     Opción 6 Lisra de PEORES Reseñas.")
+    correcta = 1
+    contador = 0
+    suma = 0
+    peores_resenas = []
+    resenas_ordenadas = []
+
+    for producto in lifestore_products:
+      for peores in lifestore_sales:
+        if producto[0] == peores[1]:
+          contador += 1
+          suma += peores[2]
+      media = suma/contador
+      formato = [media,producto[1],producto[0],]
+      peores_resenas.append(formato)
+    while peores_resenas:
+      peor = peores_resenas[0][2]
+      lista_actual1 = peores_resenas[0]
+      for grupo in peores_resenas:
+        if grupo[0] > peor:
+            peor += grupo[2]
+            lista = grupo
+      resenas_ordenadas.append(lista)
+      peores_resenas.remove(lista)
+    print("\n Ordenados los datos:  de las mejores reseñas\n")
+    for i in range (0,10):
+      print(contador, "Nombre: ",resenas_ordenadas[i][1])
+      print("Calificación en Reseña: ",resenas_ordenadas[i][0])
+      print("------------------------------------------------------------------")
+      
+elif select == "7":
+    print("Seleccionaste:     Opción 7 Ventas promedio MENSUALES.")
+    lista_fecha= []
+    for venta in lifestore_sales: #Vamos a trabajar sobe la Lista de Ventas. 
+        lista_fecha.append(venta[3]) #Este indice se refuere a la Fecha
+        lista_anos = []
+    for ano in lista_fecha:
+        lista_anos.append([ano[3:5], ano[6:10]]) #Trabajamos con un Sub-Índice de Mes y otro por Año.
+    for venta_mes in lista_anos:
+        enero = lista_anos.count(['01','2020'])
+    print("Enero: ", enero)
+    for venta_mes in lista_anos:
+        febrero = lista_anos.count(['02','2020'])
+    print("Febrero: ", febrero)
+    for venta_mes in lista_anos:			    
+        marzo = lista_anos.count(['03','2020'])			    
+    print("Marzo: ", marzo)			   
+    for venta_mes in lista_anos:			    
+        abril = lista_anos.count(['04','2020'])			    
+    print("Abril: ", abril)			  
+    for venta_mes in lista_anos:			    
+        mayo = lista_anos.count(['05','2020'])			    
+    print("Mayo: ", mayo)			  
+    for venta_mes in lista_anos:			    
+        junio = lista_anos.count(['06','2020'])			    
+    print("Junio:  ", junio)			  
+    for venta_mes in lista_anos:			    
+        julio = lista_anos.count(['07','2020'])			    
+    print("Julio: ", julio)			  
+    for venta_mes in lista_anos:			    
+        agosto = lista_anos.count(['08','2020'])			    
+    print("Agosto: ", agosto)			  
+    for venta_mes in lista_anos:			    
+        septiembre = lista_anos.count(['09','2020'])			    
+    print("Septiembre: ", septiembre)			  
+    for venta_mes in lista_anos:			    
+        octubre = lista_anos.count(['10','2020'])			    
+    print("Octubre:  ", octubre)			  
+    for venta_mes in lista_anos:			    
+        noviembre = lista_anos.count(['11','2020'])			    
+    print("Noviembre:  ", noviembre)			  			  
+    for venta_mes in lista_anos:			    
+        diciembre = lista_anos.count(['12','2020'])			    
+    print("Diciembre: ", diciembre)
+
+elif select == "A":
+    print("Seleccionaste:     Opción A Lista de Productos.")
+    print(lifestore_products)
+
+elif select == "B":
+    print("Seleccionaste:     Opción B Lista de Productos MÁS Vendidos.")
+    contador = 0
+    ventas_totales = []
+    ventas_ordenadas = []
+    
+    for producto in lifestore_products:
+        for venta in lifestore_sales:
+            if producto[0] == venta[1]:
+                contador +=1
+            formato = [producto[0], contador, producto[1]]
+            ventas_totales.append(formato)
+            contador = 0
+    while ventas_totales:
+        maximo = ventas_totales[0][1]
+        lista_actual = ventas_totales[0]
+        for grupo in ventas_totales:
+            if grupo[1]>maximo:
+                maximo = grupo[1]
+                lista_actual = grupo
+        ventas_ordenadas.append(lista_actual)
+        ventas_totales.remove(lista_actual)
+    for i in range(0,10):
+        contador +=1
+        print("\n No. ", contador, "Producto: ", ventas_ordenadas[i][2])
+        print("------------------------------------------------------------------")
+
+elif select == "C":
+    print("Seleccionaste:     Opción C Lista con Productos MÁS BUSCADOS.")
+    contador = 0
+    busquedas_totales = []
+    busquedas_ordenadas = []
+
+    for producto in lifestore_products:
+        for buscar in lifestore_searches:
+            if producto[0] == buscar[1]:
+                contador += 1
+        formato_busquedas = [producto[0], contador, producto[1]]
+        busquedas_totales.append(formato_busquedas)
+        contador = 0
+        
+    while busquedas_totales:
+        maximo = busquedas_totales[0][1]
+        lista1 = busquedas_totales[0]
+        for grupo in busquedas_totales:
+            if grupo[1] > maximo:
+                maximo = grupo[1]
+                lista1 = grupo
+        busquedas_ordenadas.append(lista1)
+        busquedas_totales.remove(lista1)
+        
+    for i in range (0,10):
+        contador += 1
+        print("Nombre del Producto: ", busquedas_ordenadas[i][2])
+        print("------------------------------------------------------------------")
+
+else:
+    print("La opción que selecciono no es valida...")
+    print("Por favor, intente nuevamente")
+    
+    
